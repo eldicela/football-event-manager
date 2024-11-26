@@ -15,7 +15,7 @@ namespace FEM.Infrastructure.Data.Repositories
             _dbSet = context.Set<FootballClub>();
         }
 
-        public async Task Add(FootballClub club)
+        public async Task AddAsync(FootballClub club)
         {
             await _dbSet.AddAsync(club);
         }

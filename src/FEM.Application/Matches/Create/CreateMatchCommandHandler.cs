@@ -23,7 +23,7 @@ namespace FEM.Application.Matches.Create
                 Status = Domain.Enums.MatchStatus.NOT_STARTED,
             };
 
-            await _unitOfWork.MatchRepositry.Add(match);
+            await _unitOfWork.MatchRepositry.AddAsync(match);
             await _unitOfWork.CommitAsync(cancellationToken);
             return match.Id;
         }

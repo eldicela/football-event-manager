@@ -5,6 +5,6 @@ namespace FEM.Domain.Interfaces.Repositories;
 
 public interface IFootballClubRepository
 {
-    Task Add(FootballClub club);
+    Task AddAsync(FootballClub club);
     Task<FootballClub> GetByIdAsync(int id);
 }

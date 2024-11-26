@@ -13,7 +13,7 @@ internal class CardRepository : ICardRepository
     {
         _dbSet = context.Set<Card>();
     }
-    public async Task Add(Card card)
+    public async Task AddAsync(Card card)
     {
         await _dbSet.AddAsync(card);
     }

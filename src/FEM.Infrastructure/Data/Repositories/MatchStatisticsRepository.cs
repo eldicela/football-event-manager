@@ -14,7 +14,7 @@ internal class MatchStatisticsRepository : IMatchStatisticsRepository
         _dbSet = context.Set<MatchStatistics>();
     }
 
-    public async Task Add(MatchStatistics matchStatistics)
+    public async Task AddAsync(MatchStatistics matchStatistics)
     {
         await _dbSet.AddAsync(matchStatistics);
     }

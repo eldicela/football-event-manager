@@ -10,9 +10,10 @@ internal class FutballClubPlayerRepository : IFootballClubPlayerRepository
     private readonly DbSet<FootballClubPlayer> _dbSet;
     public FutballClubPlayerRepository(FEMDbContext context)
     {
-        _dbSet = context.Set<FootballClubPlayer>();
+        _dbSet = context.Set<FootballClubPlayer>();        
     }
-    public async Task Add(FootballClubPlayer footballClubPlayer)
+
+    public async Task AddAsync(FootballClubPlayer footballClubPlayer)
     {
         await _dbSet.AddAsync(footballClubPlayer);
     }

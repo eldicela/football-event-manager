@@ -12,7 +12,7 @@ namespace FEM.Infrastructure.Data.Repositories
         {
             _dbSet = context.Set<Match>();
         }
-        public async Task Add(Match match)
+        public async Task AddAsync(Match match)
         {
             await _dbSet.AddAsync(match);
         }

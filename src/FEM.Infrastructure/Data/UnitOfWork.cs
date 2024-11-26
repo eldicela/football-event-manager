@@ -62,6 +62,26 @@ namespace FEM.Infrastructure.Data
             }
         }
 
+        private IPlayersRepository _playersRepository;
+        public IPlayersRepository PlayerRepository
+        {
+            get
+            {
+                _playersRepository ??= new PlayersRepositories(_context);
+                return _playersRepository;
+            }
+        }
+
+        private IFootballClubPlayerRepository _footballClubPlayerRepository;
+        public IFootballClubPlayerRepository footballClubPlayerRepository
+        {
+            get
+            {
+                _footballClubPlayerRepository ??= new FutballClubPlayerRepository(_context);
+                return _footballClubPlayerRepository;
+            }
+        }
+
         public void Commit()
         {
             _context.SaveChanges();

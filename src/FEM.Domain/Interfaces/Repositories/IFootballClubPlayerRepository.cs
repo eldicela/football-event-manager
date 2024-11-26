@@ -6,5 +6,5 @@ namespace FEM.Domain.Interfaces.Repositories;
 
 public interface IFootballClubPlayerRepository
 {
-    Task Add(FootballClubPlayer footballClubPlayer);
+    Task AddAsync(FootballClubPlayer footballClubPlayer);
 }

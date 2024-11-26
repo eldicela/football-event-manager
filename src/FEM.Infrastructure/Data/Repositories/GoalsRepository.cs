@@ -15,7 +15,7 @@ internal class GoalsRepository : IGoalRepository
         _dbSet = context.Set<Goal>();
     }
 
-    public async Task Add(Goal goal)
+    public async Task AddAsync(Goal goal)
     {
         await _dbSet.AddAsync(goal);
     }
