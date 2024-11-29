@@ -35,20 +35,6 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
 
-
-
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-
-                            var user = UserManager.GetUserAsync(User).Result;
-
-                            @if (UserManager.IsInRoleAsync(user, "Admin").Result)
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="Admin" asp-controller="Home" asp-action="Index">Dashboard</a>
-                                </li>
-                            }
-                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -69,7 +55,6 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/matchFilter.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

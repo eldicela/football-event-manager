@@ -20,6 +20,11 @@ namespace FEM.Infrastructure.Data.Repositories
             await _dbSet.AddAsync(club);
         }
 
+        public async Task<IEnumerable<FootballClub>> GetAllAsync()
+        {
+            return await _dbSet.AsNoTracking().ToListAsync();
+        }
+
         public async Task<FootballClub> GetByIdAsync(int id)
         {
             return await _dbSet.FindAsync(id) ?? throw new Exception($"Football club with id: {id} doesn't exist");

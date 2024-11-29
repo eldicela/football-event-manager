@@ -22,5 +22,5 @@ internal class UpdateMatchCommand : ICommand<Unit>
         CategoryId = categoryId;
         Status = status;
     }
-    
+
 }

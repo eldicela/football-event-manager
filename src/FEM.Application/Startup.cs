@@ -1,4 +1,5 @@
 ﻿
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -11,6 +12,8 @@ public static class Startup
         var assembly = Assembly.GetExecutingAssembly();
 
         services.AddMediatR(cnf => cnf.RegisterServicesFromAssembly(assembly));
+
+        services.AddValidatorsFromAssembly(assembly);
 
         return services;
     }

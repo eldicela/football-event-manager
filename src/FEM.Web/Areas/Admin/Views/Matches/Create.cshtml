@@ -1,0 +1,70 @@
+﻿@using FEM.Domain.Enums;
+
+@model FEM.Application.DTOS.MatchAddRequestModel
+
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+@{
+    var clubs = ViewBag.Clubs;
+}
+<h4>MatchAddRequestModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"></label>
+                <input asp-for="CategoryId" class="form-control" />
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Team1" class="control-label"></label>
+                <select asp-for="Team1" class="form-control" >
+                    <option value=0 >--- Select Team 1 --- </option>
+                    @{
+                        foreach( var c in clubs)
+                        {
+                            <option value="@c.Id">@c.Name</option>
+                        }
+                    }
+                    
+                </select>
+                <span asp-validation-for="Team1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Team2" class="control-label"></label>
+                <select asp-for="Team2" class="form-control">
+                    <option value=0 selected="@true">--- Select Team 2 --- </option>
+                    @{
+                        foreach (var c in clubs)
+                        {
+                            <option value="@c.Id">@c.Name</option>
+                        }
+                    }
+
+                </select>
+                <span asp-validation-for="Team2" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

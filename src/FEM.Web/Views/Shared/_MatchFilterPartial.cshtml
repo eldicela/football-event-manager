@@ -1,0 +1,33 @@
+﻿@using FEM.Domain.Enums;
+
+<form id="match-filter-form" class="filter">
+    <div>
+        <label>Find matches by team name</label>
+        <input type="text" id="search-input" name="search-input" placeholder="Enter team name" />
+        <input type="checkbox" name="live-matches" id="live-matches" />
+        <label for="live-matches">
+            Live
+        </label>
+        <label for="startDate">From Date: </label>
+        <input name="startDate" type="date" id="startDate" />
+        <label for="endDate">To Date: </label>
+        <input name="endDate" type="date" id="endDate" />
+
+        <select name="sort-type" id="sort-type">
+            @{
+                foreach (var itm in Enum.GetValues(typeof(SortType)))
+                {
+                    <option value="@itm">@itm.ToString().ToLower()</option>
+                }
+            }
+
+        </select>
+    </div>
+
+
+    <button style="display:none;" id="match-filter-sbt" type="submit">Submit </button>
+
+</form>
+
+
+

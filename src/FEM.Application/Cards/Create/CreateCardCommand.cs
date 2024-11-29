@@ -12,4 +12,14 @@ public class CreateCardCommand : ICommand<int>
     public int IssuedMinute { get; set; }
     public string Reason { get; set; }
     public CardType Type { get; set; }
+
+    public CreateCardCommand(int matchId, int teamId, int playerId, int issuedMinute, string reason, CardType type)
+    {
+        MatchId = matchId;
+        TeamId = teamId;
+        PlayerId = playerId;
+        IssuedMinute = issuedMinute;
+        Reason = reason;
+        Type = type;
+    }
 }
