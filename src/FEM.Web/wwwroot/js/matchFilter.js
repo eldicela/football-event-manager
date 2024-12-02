@@ -30,8 +30,9 @@ startDateInput.value = formatDate(new Date(), false)
 
 const onFormSubbmitHandler = async (event) => {
     event.preventDefault()
+    console.log(nameInput.value)
 
-    const response = await fetch(`${BASE_APP_PATH}/matches/filter?std=${startDateInput.value}&edt${endDateInput.value}&lm=${liveMatchesInput.checked}&st=${sortTypeInput.value}&tname${nameInput.value}`)
+    const response = await fetch(`${BASE_APP_PATH}/matches/filter?std=${startDateInput.value}&edt=${endDateInput.value}&lm=${liveMatchesInput.checked}&st=${sortTypeInput.value}&tname=${nameInput.value}`)
     const resData = await response.json();
 
     if (resData.length < 1) {
@@ -55,14 +56,33 @@ const onFormSubbmitHandler = async (event) => {
     console.log(resData);
 }
 
-const teamNameChangeHandler = (event) => {
+const teamNameChangeHandler = async (event) => {
     const name = event.target.value;
     console.log(event)
     if (name.length < 3) {
         return
     }
 
-    submitBtn.click()
+    const response = await fetch(`${BASE_APP_PATH}/matches/team?teamName=${name}`)
+    const resData = await response.json();
+
+    if (resData.length < 1) {
+        matchesSection.innerHTML = `<p>Cannot find matches for ${name}</p>`
+        return;
+    }
+
+    let htmlMatches = ` `
+    resData.forEach(x =>
+
+        htmlMatches += `
+        <div class="match">
+            <div>${x.team1.name}</div>
+            <div>${formatDate(new Date(x.date), true)}</div>
+            <div>${x.team2.name}</div>
+        </div>  `
+    )
+
+    matchesSection.innerHTML = htmlMatches  
 }
 
 const liveMatchesChangeHandler = (event) => {

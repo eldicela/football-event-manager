@@ -19,7 +19,7 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var query = new GetMatchesFilteredQuery(DateTime.Now.AddDays(2), false, Domain.Enums.SortType.ASCENDING, null, null);
+        var query = new GetMatchesFilteredQuery(DateTime.Now, false, Domain.Enums.SortType.ASCENDING, null, null);
         var results = await _mediator.Send(query);
 
         return View(results.Select(x => new Application.DTOS.MatchViewModel
