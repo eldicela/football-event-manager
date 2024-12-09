@@ -17,4 +17,11 @@ internal class FutballClubPlayerRepository : IFootballClubPlayerRepository
     {
         await _dbSet.AddAsync(footballClubPlayer);
     }
+
+    public async Task<IEnumerable<int>> GetPlayersIdsByTeamIdAsync(int teamId)
+    {
+       return _dbSet.Where(x => x.FootballClubId == teamId)
+            .Select(x => x.PlayerId)
+            .ToList();
+    }
 }

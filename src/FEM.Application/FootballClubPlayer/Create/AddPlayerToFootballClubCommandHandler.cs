@@ -16,7 +16,7 @@ internal class AddPlayerToFootballClubCommandHandler : ICommandHandler<AddPlayer
 
     public async Task<Unit> Handle(AddPlayerToFootballClubCommand request, CancellationToken cancellationToken)
     {
-        await _unitOfWork.footballClubPlayerRepository.AddAsync(new Domain.Entities.FootballClubPlayer
+        await _unitOfWork.FootballClubPlayerRepository.AddAsync(new Domain.Entities.FootballClubPlayer
         {
             FootballClubId = request.ClubId,
             PlayerId = request.PlayerId,

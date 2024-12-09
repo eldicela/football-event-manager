@@ -18,11 +18,18 @@ internal class MatchStatisticsRepository : IMatchStatisticsRepository
     {
         await _dbSet.AddAsync(matchStatistics);
     }
+
+    public async Task<IEnumerable<MatchStatistics>> GetByMatchIdAsync(int matchId)
+    {
+        return await _dbSet.Where(x => x.MatchId == matchId)
+            .ToListAsync();
+    }
+
     public async Task<MatchStatistics> GetByMatchIdForTeamIdAsync(int matchId, int teamId)
     {
         return await _dbSet
             .Where(x => x.MatchId == matchId && x.TeamId == teamId)
-            .FirstOrDefaultAsync() 
+            .FirstOrDefaultAsync()
             ?? throw new Exception("Match statistics doesn't exists");
     }
 }

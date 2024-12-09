@@ -1,3 +1,7 @@
+const padZ = (value) => {
+    return value < 10 ? `0${value}` : `${value}`;
+};
+
 const formatDate = (date, showHour) => {
     let month = date.getMonth() + 1;
     let day = date.getDate();
@@ -10,6 +14,5 @@ const formatDate = (date, showHour) => {
         minute: "2-digit",
     });
 
-    return stringDate + " " + hour ;
+    return stringDate + " " + hour;
 };
-

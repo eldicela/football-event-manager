@@ -18,8 +18,19 @@ internal class CardRepository : ICardRepository
         await _dbSet.AddAsync(card);
     }
 
+    public async Task AddRangeAsync(List<Card> cards)
+    {
+       await _dbSet.AddRangeAsync(cards);
+    }
+
     public async Task<Card> GetByIdAsync(int id)
     {
         return await _dbSet.FindAsync(id) ?? throw new Exception($"Card with id: {id} doesn't exists");
+    }
+
+    public async Task<IEnumerable<Card>> GetCardsByMatchAndTeamIdAsync(int matchId, int teamId)
+    {
+        return await _dbSet.Where(x => x.MatchId == matchId && x.TeamId == teamId)
+            .ToListAsync();
     }
 }

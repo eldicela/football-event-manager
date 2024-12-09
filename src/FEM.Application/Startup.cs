@@ -1,4 +1,7 @@
 ﻿
+using FEM.Application.FootballClubPlayer.Service;
+using FEM.Application.Interfaces.Services;
+using FEM.Application.Players.Service;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -14,6 +17,9 @@ public static class Startup
         services.AddMediatR(cnf => cnf.RegisterServicesFromAssembly(assembly));
 
         services.AddValidatorsFromAssembly(assembly);
+
+        services.AddScoped<IPlayersService, PlayersService>();
+        services.AddScoped<IFootballClubPlayerService, FootballClubPlayerService>();
 
         return services;
     }

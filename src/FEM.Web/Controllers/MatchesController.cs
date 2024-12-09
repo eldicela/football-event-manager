@@ -1,5 +1,6 @@
 ﻿using FEM.Application.DTOS;
 using FEM.Application.Matches.Get;
+using FEM.Application.MatchStatistics.Get;
 using FEM.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -43,5 +44,26 @@ public class MatchesController : Controller
         var query = new GetMatchesFilteredQuery(startDate, liveMatches, sort, endDate, tname);
         var data = await _mediator.Send(query);
         return data;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Details([FromRoute] int id)
+    {
+
+        var query = new GetMatchStatisticsByMatchIdQuery(id);
+
+        var matchStatisticsVM = await _mediator.Send(query);
+
+        return View(matchStatisticsVM);
+    }
+
+    [HttpPost]
+    public IActionResult UpdateStatus([FromBody] MatchUpdateStatusModel model)
+    {
+        Console.WriteLine(model);
+
+        if (model.Id <= 0) return BadRequest();
+
+        return Ok();
     }
 }

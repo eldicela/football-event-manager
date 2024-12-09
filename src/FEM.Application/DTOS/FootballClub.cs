@@ -9,3 +9,18 @@ public class FootballClub
     public string Name { get; set; }
     public ClubType Type { get; set; }
 }
+
+public class FootballClubAddRequestModel
+{
+    public string Name { get; set; }
+    public ClubType Type { get; set; }
+}
+
+public class FootballClubPlayerAddRequestModel
+{
+    public int ClubId { get; set; }
+    public bool IsNewPlayer { get; set; }
+    public int PlayerId { get; set; }
+    public PlayerAddRequestModel Player { get; set; }
+
+}

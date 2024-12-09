@@ -32,3 +32,9 @@ public class MatchAddRequestModel
     public int Team1 { get; set; }
     public int Team2 { get; set; }
 }
+
+public class MatchUpdateStatusModel
+{
+    public int Id { get; set; }
+    public string Status { get; set; }
+}

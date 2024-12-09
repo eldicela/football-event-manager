@@ -1,0 +1,69 @@
+﻿@model List<FEM.Application.DTOS.MatchStatisticsViewModel>
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Team 1 - Team 2 </h4>
+    <div>
+        @* this div will be flex so the child elements will be horizontally *@
+        @foreach (var m in Model)
+        {
+            <span>@m.Goals.Count</span>
+        }
+    </div>
+    <hr />
+    <div>
+        @foreach (var stat in Model)
+        {
+            <div>
+                <h3>Team @stat.TeamId</h3>
+                <p>Corners @stat.Corners</p>
+                <p>Possestion @stat.Posession</p>
+                <div>
+                    <h5>Goals</h5>
+                    @foreach(var goal in stat.Goals)
+                    {
+                        <p>Player @goal.PlayerId</p>
+                        <p>Minute @goal.Minute</p>
+                        <p>@if (goal.Type == FEM.Domain.Enums.GoalType.REGULAR)
+                            {
+                                <span>Regular</span>
+                            } else
+                            {
+                                <span>Penalty</span>
+                            }
+                        </p>
+                    }
+                </div>
+                <div>
+                    <h5>Goals</h5>
+                    @foreach (var card in stat.Cards)
+                    {
+                        <p>Player @card.PlayerId</p>
+                        <p>Minute @card.IssuedMinute</p>
+                        <p>
+                            @if (card.Type == FEM.Domain.Enums.CardType.YELLOW)
+                            {
+                                <span>Yellow</span>
+                            }
+                            else
+                            {
+                                <span>Red</span>
+                            }
+                        </p>
+                        <p>Reason: @card.Reason</p>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>

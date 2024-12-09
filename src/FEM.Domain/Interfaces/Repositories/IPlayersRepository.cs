@@ -8,5 +8,6 @@ namespace FEM.Domain.Interfaces.Repositories
     {
         Task AddAsync(Player player);
         Task<Player> GetByIdAsync(int id);
+        Task<IEnumerable<Player>> GetPlayersByTeamIdsAsync(List<int> ids);
     }
 }

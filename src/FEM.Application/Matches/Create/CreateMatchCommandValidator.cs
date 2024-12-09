@@ -19,10 +19,8 @@ public class CreateMatchCommandValidator : AbstractValidator<CreateMatchCommand>
             .NotEmpty().WithMessage("TeamId shouldn't be empty");
 
         RuleFor(x => x.Team2)
-           .NotEmpty().WithMessage("TeamId shouldn't be empty");
+           .NotEmpty().WithMessage("TeamId shouldn't be empty")
+           .NotEqual(x => x.Team1).WithMessage("Team 2 cannot be same as Team 1");
 
-
-        //TO DO
-        //Team1 id shouldn't be same as team 2 id
     }
 }

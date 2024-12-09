@@ -10,7 +10,7 @@ public interface IUnitOfWork
     IGoalRepository GoalRepository { get; }
     ICardRepository CardRepository { get; }
     IPlayersRepository PlayerRepository { get; }
-    IFootballClubPlayerRepository footballClubPlayerRepository { get; }
+    IFootballClubPlayerRepository FootballClubPlayerRepository { get; }
     #endregion
 
     Task CommitAsync(CancellationToken cancellationToken = default);

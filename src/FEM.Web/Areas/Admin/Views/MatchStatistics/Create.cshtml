@@ -1,0 +1,163 @@
+﻿@model FEM.Application.DTOS.MatchStatisticsAddRequestModel
+
+<style>
+    .hide {
+        display: none;
+    }
+</style>
+
+<h4>MatchStatisticsAddRequestModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form id="match-statistics-form"> </form>
+        <form id="goals-form"> </form>
+        <form id="cards-form"> </form>
+
+        <div id="validation-summary" class="text-danger"></div>
+
+        <input form="match-statistics-form" hidden id="MatchId" name="MatchId" value="@Model.MatchId" class="form-control" />
+
+        <input form="match-statistics-form" hidden id="TeamId" name="TeamId" value="@Model.TeamId" class="form-control" />
+
+        <div class="form-group">
+            <label for="Corners" class="control-label">Corners</label>
+            <input form="match-statistics-form" id="Corners" name="Corners" min="0" type="number" class="form-control" />
+            <span id="validation-for-Corners" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="Possession" class="control-label">Possesion</label>
+            <input form="match-statistics-form" id="Possession" name="Posession" type="number" step=".01" class="form-control" />
+            <span id="validation-for-Possession" class="text-danger"></span>
+        </div>
+
+        <div class="form-control">
+            <input type="checkbox" id="Scored" />
+            <label for="Scored" class="control-label">Goal scored</label>
+        </div>
+
+        <div id="goals-form-section" class="hide">
+            <div class="form-group">
+                <label for="PlayerId" class="control-label">Player</label>
+                <select class="form-control" form="goals-form" id="PlayerId">
+                    @foreach (var player in ViewBag.Players)
+                    {
+                        <option value="@player.Id">@player.Name</option>
+                    }
+                </select>
+                <span id="validation-for-PlayerId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="Minute" class="control-label">Scored Minute</label>
+                <input id="Minute" form="goals-form" name="Minute" type="number" class="form-control" />
+                <span id="validation-for-Minute" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="GoalType" class="control-label">Goal Type</label>
+                <select form="goals-form" class="form-control" id="GoalType">
+                    @foreach (var goalType in Enum.GetValues<FEM.Domain.Enums.GoalType>())
+                    {
+                        <option value="@goalType">@goalType.ToString().ToLower()</option>
+                    }
+                </select>
+                <span id="validation-for-GoalType" class="text-danger"></span>
+            </div>
+
+            <input form="goals-form" id="button-add-goal" type="submit" value="Add Goal" />
+        </div>
+
+
+        <div class="form-control">
+            <input type="checkbox" id="Card-Issued" />
+            <label for="Card-Issued" class="control-label">Card Issued</label>
+        </div>
+
+        <div id="cards-form-section" class="hide">
+
+            <div class="form-group">
+                <label for="CardPlayerId" class="control-label">Player</label>
+                <select form="cards-form" class="form-control" id="CardPlayerId">
+                    @foreach (var player in ViewBag.Players)
+                    {
+                        <option value="@player.Id">@player.Name</option>
+                    }
+                </select>
+                <span id="validation-for-CardPlayerId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="CardIssuedMinute" class="control-label">Issued Minute</label>
+                <input form="cards-form" id="CardIssuedMinute" name="CardIssuedMinute" type="number" class="form-control" />
+                <span id="validation-for-CardIssuedMinute" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="CardType" class="control-label">Card Type</label>
+                <select form="cards-form" class="form-control" id="CardType">
+                    @foreach (var cardType in Enum.GetValues<FEM.Domain.Enums.CardType>())
+                    {
+                        <option value="@cardType">@cardType.ToString().ToLower()</option>
+                    }
+                </select>
+                <span id="validation-for-CardType" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="Reason" class="control-label">Reason</label>
+                <input form="cards-form" id="Reason" name="Reason" type="text" class="form-control" />
+                <span id="validation-for-Reason" class="text-danger"></span>
+            </div>
+            <input type="submit" form="cards-form" value="Add Card">
+        </div>
+        <input type="submit" form="match-statistics-form" value="Create Match Stats">
+
+    </div>
+
+    <div class="col-md-4">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Player
+                    </th>
+                    <th>
+                        Minute
+                    </th>
+                    <th>
+                        Goal Type
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody id="goal-list-display">&nbsp;</tbody>
+        </table>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Player
+                    </th>
+                    <th>
+                        Minute
+                    </th>
+                    <th>
+                        Card Type
+                    </th>
+                    <th>
+                        Reason
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody id="card-list-display">&nbsp;</tbody>
+        </table>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

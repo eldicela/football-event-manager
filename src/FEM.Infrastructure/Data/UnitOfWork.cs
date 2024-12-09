@@ -73,7 +73,7 @@ namespace FEM.Infrastructure.Data
         }
 
         private IFootballClubPlayerRepository _footballClubPlayerRepository;
-        public IFootballClubPlayerRepository footballClubPlayerRepository
+        public IFootballClubPlayerRepository FootballClubPlayerRepository
         {
             get
             {

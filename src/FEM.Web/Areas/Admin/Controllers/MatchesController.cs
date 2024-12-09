@@ -9,8 +9,9 @@ using FluentValidation;
 using FluentValidation.Results;
 using FEM.Application.FootballClubs.Get;
 using Microsoft.AspNetCore.Http;
+using FEM.Application.Matches.Update;
 
-namespace FEM.Web.Areas.Admin.Controllers.MatchesController
+namespace FEM.Web.Areas.Admin.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class MatchesController : Controller
@@ -21,18 +22,6 @@ namespace FEM.Web.Areas.Admin.Controllers.MatchesController
         {
             _mediator = serviceProvider.GetRequiredService<IMediator>();
             _createMatchValidator = serviceProvider.GetRequiredService<IValidator<CreateMatchCommand>>();
-        }
-
-        [Area("Admin")]
-        public async Task<IActionResult> Index(string date, byte live, byte sortType)
-        {
-            var today = new DateTime(2024, 12, 01);
-            var liveMatches = false;
-            var sort = SortType.ASCENDING;
-
-            //var query = new GetMatchesFilteredQuery(today, liveMatches, sort);
-            //var matches = await _mediator.Send(query);
-            return View();
         }
 
         [Area("Admin")]
@@ -70,7 +59,21 @@ namespace FEM.Web.Areas.Admin.Controllers.MatchesController
             var id = await _mediator.Send(command);
             Console.WriteLine("Created Match Id:", id);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home", new { area = "Admin" });
+        }
+
+        [Area("Admin")]
+        [HttpPost]
+        public async Task<IActionResult> UpdateStatus([FromBody] MatchUpdateStatusModel model)
+        {
+            if (model.Id <= 0) throw new Exception("Id cannot be negative or zero");
+
+            var matchStat = Enum.Parse<MatchStatus>(model.Status);
+
+            var command = new UpdateMatchStatusCommand(model.Id, matchStat);
+            await _mediator.Send(command);
+
+            return Json(new {error = false, message = "created successfully"});
         }
     }
 }

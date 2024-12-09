@@ -7,24 +7,6 @@ const sortTypeInput = document.getElementById("sort-type");
 const submitBtn = document.getElementById("match-filter-sbt");
 const matchesSection = document.getElementById("matches-list");
 
-const padZ = (value) => {
-    return value < 10 ? `0${value}` : `${value}`;
-};
-
-const formatDate = (date, showHour) => {
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-    let stringDate = `${date.getFullYear()}-${padZ(month)}-${padZ(day)}`;
-
-    if (!showHour) return stringDate;
-
-    const hour = date.toLocaleTimeString(undefined, {
-        hour: "2-digit",
-        minute: "2-digit",
-    });
-
-    return stringDate + " " + hour;
-};
 
 startDateInput.value = formatDate(new Date(), false)
 
@@ -48,6 +30,7 @@ const onFormSubbmitHandler = async (event) => {
             <div>${x.team1.name}</div>
             <div>${formatDate(new Date(x.date), true)}</div>
             <div>${x.team2.name}</div>
+            <a href="${BASE_APP_PATH}/matches/details/${x.id}">Details</a>
         </div>  `
     )
 
@@ -79,6 +62,7 @@ const teamNameChangeHandler = async (event) => {
             <div>${x.team1.name}</div>
             <div>${formatDate(new Date(x.date), true)}</div>
             <div>${x.team2.name}</div>
+            <a href="${BASE_APP_PATH}/matches/details/${x.id}">Details</a>
         </div>  `
     )
 

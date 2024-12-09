@@ -26,6 +26,7 @@
             <div>@itm.Team1.Name</div>
             <div>@itm.Date.ToString("yyyy-MM-dd HH:mm")</div>
             <div>@itm.Team2.Name</div>
+            <a asp-action="Details" asp-controller="Matches" asp-route-id="@itm.Id">Details</a>
         </div>
     }
 </div>
