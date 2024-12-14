@@ -1,6 +1,7 @@
 ﻿
 using FEM.Domain.Interfaces.Repositories;
 using FEM.Infrastructure.Data.Repositories;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace FEM.Infrastructure.Data
 {
@@ -90,6 +91,16 @@ namespace FEM.Infrastructure.Data
         public async Task CommitAsync(CancellationToken cancellationToken = default)
         {
             await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        public IDbContextTransaction BeginTransaction()
+        {
+            return _context.Database.BeginTransaction();
+        }
+
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await _context.Database.BeginTransactionAsync();
         }
     }
 }

@@ -27,7 +27,8 @@ internal class CreateMatchStatisticsCommandHandler : ICommandHandler<CreateMatch
         };
 
         await _unitOfWork.MatchStatisticsRepository.AddAsync(matchStatistics);
-        await _unitOfWork.CommitAsync(cancellationToken);
+        //await _unitOfWork.CommitAsync(cancellationToken);
+        _unitOfWork.Commit();
         return Unit.Value;
     }
 

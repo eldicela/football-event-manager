@@ -20,5 +20,6 @@ public class GoalAddRequestModel
     public int TeamId { get; set; }
     public int PlayerId { get; set; }
     public int Minute { get; set; }
+    public string TypeString { get; set; } 
     public GoalType Type { get; set; }
 }

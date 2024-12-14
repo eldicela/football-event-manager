@@ -92,7 +92,7 @@ const goalFormSubmitHandler = (event) => {
         TeamId: teamIdInput.value,
         PlayerId: event.target[FORM_FIELD_IDS.playerId].value,
         Minute: event.target[FORM_FIELD_IDS.scoredMinute].value,
-        GoalType: event.target[FORM_FIELD_IDS.goalType].value,
+        TypeString: event.target[FORM_FIELD_IDS.goalType].value,
     };
 
     goalsList.push(goal)
@@ -121,7 +121,7 @@ const cardFormSubmitHandler = (event) => {
         TeamId: teamIdInput.value,
         PlayerId: event.target[FORM_FIELD_IDS.cardPlayerId].value,
         IssuedMinute: event.target[FORM_FIELD_IDS.cardIssuedMinute].value,
-        CardType: event.target[FORM_FIELD_IDS.cardType].value,
+        TypeString: event.target[FORM_FIELD_IDS.cardType].value,
         Reason: event.target[FORM_FIELD_IDS.reason].value
     };
 

@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.EntityFrameworkCore.Storage;
+
 namespace FEM.Domain.Interfaces.Repositories;
 
 public interface IUnitOfWork 
@@ -13,6 +15,8 @@ public interface IUnitOfWork
     IFootballClubPlayerRepository FootballClubPlayerRepository { get; }
     #endregion
 
+    IDbContextTransaction BeginTransaction();
+    Task<IDbContextTransaction> BeginTransactionAsync();
     Task CommitAsync(CancellationToken cancellationToken = default);
     void Commit();
 }

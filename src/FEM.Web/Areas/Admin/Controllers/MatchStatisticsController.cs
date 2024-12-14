@@ -1,4 +1,5 @@
-﻿using FEM.Application.Cards.Create;
+﻿using FEM.Domain.Enums;
+using FEM.Application.Cards.Create;
 using FEM.Application.DTOS;
 using FEM.Application.Goals.Create;
 using FEM.Application.Interfaces.Services;
@@ -16,8 +17,7 @@ public class MatchStatisticsController : Controller
 {
     private readonly IMediator _mediator;
     private readonly IValidator<CreateMatchStatisticsCommand> _validator;
-    private readonly IFootballClubPlayerService _footballClubPlayerService;
-    private readonly IPlayersService _playersService;
+    private readonly IServicesManager _servicesManager;
     private readonly IValidator<CreateGoalsListCommand> _goalsListComValidator;
     private readonly IValidator<CreateCardsListCommand> _cardsListComValidator;
 
@@ -25,10 +25,9 @@ public class MatchStatisticsController : Controller
     {
         _mediator = serviceProvider.GetRequiredService<IMediator>();
         _validator = serviceProvider.GetRequiredService<IValidator<CreateMatchStatisticsCommand>>();
-        _footballClubPlayerService = serviceProvider.GetRequiredService<IFootballClubPlayerService>();
-        _playersService = serviceProvider.GetRequiredService<IPlayersService>();
         _goalsListComValidator = serviceProvider.GetRequiredService<IValidator<CreateGoalsListCommand>>();
         _cardsListComValidator = serviceProvider.GetRequiredService<IValidator<CreateCardsListCommand>>();
+        _servicesManager = serviceProvider.GetRequiredService<IServicesManager>();
     }
 
     [Area("Admin")]
@@ -45,8 +44,8 @@ public class MatchStatisticsController : Controller
         if (matchId == null || matchId <= 0 || teamId == null || teamId <= 0)
             return RedirectToAction(nameof(Index));
 
-        var ids = await _footballClubPlayerService.GetPlayersIdsByTeamId(teamId.Value);
-        var players = await _playersService.GetPlayersByIdsAsync(ids);
+        var ids = await _servicesManager.FootballClubPlayersService.GetPlayersIdsByTeamId(teamId.Value);
+        var players = await _servicesManager.PlayersService.GetPlayersByIdsAsync(ids);
         ViewBag.Players = players;
 
         return View(new MatchStatisticsAddRequestModel
@@ -61,6 +60,18 @@ public class MatchStatisticsController : Controller
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] MatchStatisticsAddRequestModel model)
     {
+        model.Goals = model.Goals.Select(x =>
+        {
+            x.Type = Enum.Parse<GoalType>(x.TypeString);
+            return x;
+        }).ToList();
+
+        model.Cards = model.Cards.Select(x =>
+        {
+            x.Type = Enum.Parse<CardType>(x.TypeString);
+            return x;
+        }).ToList();
+
         var command = new CreateMatchStatisticsCommand(model.MatchId, model.TeamId, model.Corners, model.Posession);
 
         var goalCommands = model.Goals.Select(x => new CreateGoalCommand(x.MatchId, x.TeamId, x.PlayerId, x.Minute, x.Type)).ToList();
@@ -79,7 +90,7 @@ public class MatchStatisticsController : Controller
                 Response.StatusCode = 400;
                 return Json(new { error = true, model = model, errors = new { matchStatistics = valResults.Errors } });
             }
-            await _mediator.Send(command);
+            await _servicesManager.MatchStatisticsService.AddMatchStatisticsAsync(command, null, null);
             return Json(new { error = false, message = "Match statistics created successfully" });
         }
 
@@ -93,10 +104,7 @@ public class MatchStatisticsController : Controller
                 Response.StatusCode = 400;
                 return Json(new { error = true, model = model, errors = new { matchStatistics = valResults.Errors, cards = cardsFinalResults.Errors, goals = goalsFinalResults.Errors } });
             }
-            await _mediator.Send(command); // matchStatistics
-            await _mediator.Send(goalsListCommands);
-            await _mediator.Send(cardsListCommands);
-
+            await _servicesManager.MatchStatisticsService.AddMatchStatisticsAsync(command, goalsListCommands, cardsListCommands);
 
             return Json(new { error = false, message = "Match statistics created successfully" });
         }
@@ -112,8 +120,8 @@ public class MatchStatisticsController : Controller
                 return Json(new { error = true, model = model, errors = new { matchStatistics = valResults.Errors, goals = goalsResults.Errors } });
             }
 
-            await _mediator.Send(command); // matchStatistics
-            await _mediator.Send(goalsListCommands);
+            await _servicesManager.MatchStatisticsService.AddMatchStatisticsAsync(command, goalsListCommands, null);
+
             return Json(new { error = false, message = "Match statistics created successfully" });
         }
 
@@ -128,8 +136,8 @@ public class MatchStatisticsController : Controller
                 return Json(new { error = true, model = model, errors = new { matchStatistics = valResults.Errors, cards = cardsResults.Errors } });
             }
 
-            await _mediator.Send(command); // matchStatistics
-            await _mediator.Send(cardsListCommands);
+            await _servicesManager.MatchStatisticsService.AddMatchStatisticsAsync(command, null, cardsListCommands);
+          
             return Json(new { error = false, message = "Match statistics created successfully" });
         }
 

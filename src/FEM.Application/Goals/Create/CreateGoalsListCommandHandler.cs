@@ -27,7 +27,8 @@ public class CreateGoalsListCommandHandler : ICommandHandler<CreateGoalsListComm
         }).ToList();
 
         await _unitOfWork.GoalRepository.AddRangeAsync(goals);
-        await _unitOfWork.CommitAsync(cancellationToken);
+        //await _unitOfWork.CommitAsync(cancellationToken);
+        _unitOfWork.Commit();
         return Unit.Value;
     }
 }

@@ -27,7 +27,8 @@ namespace FEM.Application.Cards.Create
             }).ToList();
 
             await _unitOfWork.CardRepository.AddRangeAsync(cards);
-            await _unitOfWork.CommitAsync();
+            //await _unitOfWork.CommitAsync();
+            _unitOfWork.Commit();
 
             return Unit.Value;
         }

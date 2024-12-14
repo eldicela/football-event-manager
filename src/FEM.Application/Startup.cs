@@ -18,9 +18,8 @@ public static class Startup
 
         services.AddValidatorsFromAssembly(assembly);
 
-        services.AddScoped<IPlayersService, PlayersService>();
-        services.AddScoped<IFootballClubPlayerService, FootballClubPlayerService>();
-
+        services.AddScoped<IServicesManager, ServicesManager>();
+        
         return services;
     }
 }

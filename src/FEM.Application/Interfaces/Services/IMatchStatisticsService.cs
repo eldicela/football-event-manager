@@ -1,10 +1,13 @@
 ﻿
 
+using FEM.Application.Cards.Create;
 using FEM.Application.DTOS;
+using FEM.Application.Goals.Create;
+using FEM.Application.MatchStatistics.Create;
 
 namespace FEM.Application.Interfaces.Services;
 
 public interface IMatchStatisticsService
 {
-    void AddMatchStatisticsAsync(MatchStatisticsAddRequestModel model);
+    Task AddMatchStatisticsAsync(CreateMatchStatisticsCommand mstatCommand, CreateGoalsListCommand? goals, CreateCardsListCommand? cards);
 }

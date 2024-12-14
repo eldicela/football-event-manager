@@ -22,5 +22,6 @@ public class CardAddRequestModel
     public int PlayerId { get; set; }
     public int IssuedMinute { get; set; }
     public string Reason { get; set; }
+    public string TypeString { get; set; } 
     public CardType Type { get; set; }
 }
