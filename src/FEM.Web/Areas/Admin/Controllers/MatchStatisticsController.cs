@@ -60,6 +60,10 @@ public class MatchStatisticsController : Controller
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] MatchStatisticsAddRequestModel model)
     {
+        var match = await _servicesManager.MatchesService.GetMatchByIdAsync(model.MatchId);
+        if (match.Status != MatchStatus.FINNISHED)
+            throw new Exception("MatchStatus isn't finnished so cannot add match statistics");
+
         model.Goals = model.Goals.Select(x =>
         {
             x.Type = Enum.Parse<GoalType>(x.TypeString);

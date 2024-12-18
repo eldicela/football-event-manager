@@ -6,11 +6,17 @@
 
 
 <style>
-   .match {
+    .match {
         display: flex;
         background-color: aqua;
         height: 3rem;
         justify-content: space-around;
+        align-items: center;
+    }
+
+    .match-info {
+        display: flex;
+        flex-direction: column;
         align-items: center;
     }
 </style>
@@ -20,13 +26,22 @@
 
 
 <div id="matches-list">
-    @foreach(var itm in Model)
+    @foreach (var itm in Model)
     {
         <div class="match">
             <div>@itm.Team1.Name</div>
-            <div>@itm.Date.ToString("yyyy-MM-dd HH:mm")</div>
+            <div class="match-info">
+                <span>@itm.Date.ToString("HH:mm")</span>
+                @if (itm.Status == FEM.Domain.Enums.MatchStatus.FINNISHED)
+                {
+                    <span>@itm.Team1Goals - @itm.Team2Goals</span>
+                }
+            </div>
             <div>@itm.Team2.Name</div>
-            <a asp-action="Details" asp-controller="Matches" asp-route-id="@itm.Id">Details</a>
+            @if (itm.Status == FEM.Domain.Enums.MatchStatus.FINNISHED)
+            {
+                <a asp-action="Details" asp-controller="Matches" asp-route-id="@itm.Id">Details</a>
+            }
         </div>
     }
 </div>

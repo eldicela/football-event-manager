@@ -13,6 +13,16 @@
         justify-content: space-around;
         align-items: center;
     }
+
+    .match-status {
+        display:flex;
+        align-items: center;
+        column-gap: 10px;
+    }
+
+    .match-status p {
+        margin: 0;
+    }
 </style>
 
 <partial name="_MatchFilterPartial" />
@@ -24,15 +34,18 @@
     {
         <div class="match">
             <div>@itm.Team1.Name</div>
-            <div>@itm.Date.ToString("yyyy-MM-dd HH:mm")</div>
+            <div>@itm.Date.ToString("HH:mm")</div>
             <div>@itm.Team2.Name</div>
-            <div style="display:flex;" >
-            <p>@itm.Status</p>  
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changeStatusModal" data-bs-matchId="@itm.Id">
-                    Change Status
-                </button>
+            <div class="match-status">
+                <p id="match-status-string-@itm.Id">@itm.Status</p>
+                @if (itm.Status != FEM.Domain.Enums.MatchStatus.FINNISHED)
+                {
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changeStatusModal" data-bs-matchId="@itm.Id">
+                        Change Status
+                    </button>
+                }
             </div>
-            
+
         </div>
     }
 </div>
@@ -47,9 +60,9 @@
             </div>
             <div class="modal-body">
                 <form id="changeStatusModalForm">
-                    <select id="match-stat-change">
+                    <select id="match-stat-change" class="form-control">
                         <option value="">--- SELECT STATUS ---</option>
-                        @foreach(var status in Enum.GetValues<FEM.Domain.Enums.MatchStatus>())
+                        @foreach (var status in Enum.GetValues<FEM.Domain.Enums.MatchStatus>())
                         {
                             <option value="@status">@status.ToString().ToLower()</option>
                         }
@@ -57,8 +70,9 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <input id="changeStatModalSubmmitBtn" form="changeStatusModalForm" type="submit" class="btn btn-primary">Save changes</input>
+                <button id="modal-close-btn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <input id="changeStatModalSubmmitBtn" form="changeStatusModalForm" type="submit" value="Save changes" class="btn btn-primary" />
+                
             </div>
         </div>
     </div>

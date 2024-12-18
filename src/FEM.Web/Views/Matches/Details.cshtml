@@ -1,61 +1,80 @@
-﻿@model List<FEM.Application.DTOS.MatchStatisticsViewModel>
+﻿@using FEM.Application.DTOS;
+
+@model List<FEM.Application.DTOS.MatchStatisticsViewModel>
 
 @{
     ViewData["Title"] = "Details";
+    Match match = ViewBag.Match;
 }
-
-<h1>Details</h1>
+<link rel="stylesheet" href="~/css/matchDetails.css" asp-append-version="true" />
 
 <div>
-    <h4>Team 1 - Team 2 </h4>
-    <div>
-        @* this div will be flex so the child elements will be horizontally *@
-        @foreach (var m in Model)
-        {
-            <span>@m.Goals.Count</span>
-        }
+    <div class="match__header">
+        <div class="match__header--results">
+            <h4 >@Model[0].Team.Name - @Model[1].Team.Name</h4>
+            @if (Model.Count == 2 && match.Status == FEM.Domain.Enums.MatchStatus.FINNISHED)
+            {
+                <span>@Model[0].Goals.Count - @Model[1].Goals.Count</span>
+            }
+        </div>
+        <div class="match__header-time-info">
+            <p> @match.Date.ToString("yyyy-MM-dd")</p>
+            <span>@match.Date.ToString("HH:mm")</span>
+        </div>
     </div>
     <hr />
-    <div>
+    <div class="match__body">
         @foreach (var stat in Model)
         {
             <div>
-                <h3>Team @stat.TeamId</h3>
+                <h3>@stat.Team.Name</h3>
                 <p>Corners @stat.Corners</p>
-                <p>Possestion @stat.Posession</p>
-                <div>
+                <p>Possession @stat.Posession</p>
+                <div class="match__body__goals">
                     <h5>Goals</h5>
-                    @foreach(var goal in stat.Goals)
+                    @foreach (var goal in stat.Goals)
                     {
-                        <p>Player @goal.PlayerId</p>
-                        <p>Minute @goal.Minute</p>
-                        <p>@if (goal.Type == FEM.Domain.Enums.GoalType.REGULAR)
-                            {
-                                <span>Regular</span>
-                            } else
-                            {
-                                <span>Penalty</span>
-                            }
-                        </p>
+                        var player = stat.Players.Where(x => x.Id == goal.PlayerId).FirstOrDefault();
+
+                        <div class="match__body__goals-goal">
+
+                            <p>@player.Name</p>
+                            <p>@goal.Minute'</p>
+                            <p>
+                                @if (goal.Type == FEM.Domain.Enums.GoalType.REGULAR)
+                                {
+                                    <span>Regular</span>
+                                }
+                                else
+                                {
+                                    <span>Penalty</span>
+                                }
+                            </p>
+                        </div>
                     }
                 </div>
-                <div>
-                    <h5>Goals</h5>
+                <div class="match__body__cards">
+                    <h5>Cards</h5>
                     @foreach (var card in stat.Cards)
                     {
-                        <p>Player @card.PlayerId</p>
-                        <p>Minute @card.IssuedMinute</p>
-                        <p>
-                            @if (card.Type == FEM.Domain.Enums.CardType.YELLOW)
-                            {
-                                <span>Yellow</span>
-                            }
-                            else
-                            {
-                                <span>Red</span>
-                            }
-                        </p>
-                        <p>Reason: @card.Reason</p>
+                        var player = stat.Players.Where(x => x.Id == card.PlayerId).FirstOrDefault();
+
+                        <div class="match__body__cards-card">
+
+                            <p>@player.Name</p>
+                            <p>@card.IssuedMinute'</p>
+                            <p>
+                                @if (card.Type == FEM.Domain.Enums.CardType.YELLOW)
+                                {
+                                    <span>Yellow</span>
+                                }
+                                else
+                                {
+                                    <span>Red</span>
+                                }
+                            </p>
+                            <p>@card.Reason</p>
+                        </div>
                     }
                 </div>
             </div>
@@ -64,6 +83,5 @@
 
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+      @* <a asp-action="Index" asp>Back to List</a> *@
 </div>

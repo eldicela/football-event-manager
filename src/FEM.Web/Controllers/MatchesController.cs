@@ -1,4 +1,6 @@
 ﻿using FEM.Application.DTOS;
+using FEM.Application.FootballClubPlayer.Get;
+using FEM.Application.Interfaces.Services;
 using FEM.Application.Matches.Get;
 using FEM.Application.MatchStatistics.Get;
 using FEM.Domain.Enums;
@@ -11,9 +13,11 @@ public class MatchesController : Controller
 {
 
     private readonly IMediator _mediator;
+    private readonly IServicesManager _servicesManager;
     public MatchesController(IServiceProvider serviceProvider)
     {
         _mediator = serviceProvider.GetRequiredService<IMediator>();
+        _servicesManager = serviceProvider.GetRequiredService<IServicesManager>();
     }
 
     [HttpGet("matches/team")]
@@ -49,10 +53,16 @@ public class MatchesController : Controller
     [HttpGet]
     public async Task<IActionResult> Details([FromRoute] int id)
     {
+        var match = await _servicesManager.MatchesService.GetMatchByIdAsync(id);
+        if (match.Status != MatchStatus.FINNISHED) return Redirect("/");
+
+        ViewBag.Match = match;
 
         var query = new GetMatchStatisticsByMatchIdQuery(id);
 
         var matchStatisticsVM = await _mediator.Send(query);
+
+        Console.WriteLine(matchStatisticsVM);
 
         return View(matchStatisticsVM);
     }

@@ -18,15 +18,12 @@ public class FootballClubsController : Controller
 {
     private readonly IMediator _mediator;
     private readonly IValidator<CreateFootballClubCommand> _footballClubCommandValidator;
-    private readonly IFootballClubPlayerService _footballClubPlayerService;
-    private readonly IPlayersService _playersService;
-
+    private readonly IServicesManager _servicesManager;
     public FootballClubsController(IServiceProvider serviceProvider)
     {
         _mediator = serviceProvider.GetRequiredService<IMediator>();
         _footballClubCommandValidator = serviceProvider.GetRequiredService<IValidator<CreateFootballClubCommand>>();
-        _footballClubPlayerService = serviceProvider.GetRequiredService<IFootballClubPlayerService>();
-        _playersService = serviceProvider.GetRequiredService<IPlayersService>();
+        _servicesManager = serviceProvider.GetRequiredService<IServicesManager>();
     }
 
     [Area("Admin")]
@@ -113,8 +110,8 @@ public class FootballClubsController : Controller
     [HttpGet]
     public async Task<IActionResult> ClubPlayers([FromRoute] int id)
     {
-        var playerIds = await _footballClubPlayerService.GetPlayersIdsByTeamId(id);
-        var players = await _playersService.GetPlayersByIdsAsync(playerIds);
+        var playerIds = await _servicesManager.FootballClubPlayersService.GetPlayersIdsByTeamId(id);
+        var players = await _servicesManager.PlayersService.GetPlayersByIdsAsync(playerIds);
 
         return View(players);
     }

@@ -2,6 +2,7 @@
 
 using FEM.Application.DTOS;
 using FEM.Application.Interfaces.Messaging;
+using FEM.Application.Interfaces.Services;
 using FEM.Domain.Interfaces.Repositories;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,19 +12,28 @@ namespace FEM.Application.MatchStatistics.Get;
 internal class GetMatchStatisticsByMatchIdQueryHandler : IQueryHandler<GetMatchStatisticsByMatchIdQuery, List<MatchStatisticsViewModel>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IServicesManager _servicesManager;
     public GetMatchStatisticsByMatchIdQueryHandler(IServiceProvider serviceProvider)
     {
         _unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
+        _servicesManager = serviceProvider.GetRequiredService<IServicesManager>();
     }
 
     public async Task<List<MatchStatisticsViewModel>> Handle(GetMatchStatisticsByMatchIdQuery request, CancellationToken cancellationToken)
     {
+        var match = await _servicesManager.MatchesService.GetMatchByIdAsync(request.MatchId);
         var matchStatistics = await _unitOfWork.MatchStatisticsRepository.GetByMatchIdAsync(request.MatchId);
+        var matchStatViewModelList = new List<MatchStatisticsViewModel>();
 
-        var matchStatViewModel = matchStatistics.Select(async x =>
+
+        foreach (var item in matchStatistics)
         {
-            var goals = await _unitOfWork.GoalRepository.GetGoalsByMatchAndTeamIdAsync(x.MatchId, x.TeamId);
-            var cards = await _unitOfWork.CardRepository.GetCardsByMatchAndTeamIdAsync(x.MatchId, x.TeamId);
+            var goals = await _unitOfWork.GoalRepository.GetGoalsByMatchAndTeamIdAsync(item.MatchId, item.TeamId);
+            var cards = await _unitOfWork.CardRepository.GetCardsByMatchAndTeamIdAsync(item.MatchId, item.TeamId);
+            var team = await _servicesManager.FootballClubsService.GetFootballClubByIdAsync(item.TeamId);
+            var playersIds = await _servicesManager.FootballClubPlayersService.GetPlayersIdsByTeamId(item.TeamId);
+            var players = await _servicesManager.PlayersService.GetPlayersByIdsAsync(playersIds);
+
 
             var goalsDto = goals.Select(x => new DTOS.Goal
             {
@@ -46,19 +56,19 @@ internal class GetMatchStatisticsByMatchIdQueryHandler : IQueryHandler<GetMatchS
                 Type = x.Type,
             }).ToList();
 
-            return new MatchStatisticsViewModel
+            matchStatViewModelList.Add(new MatchStatisticsViewModel
             {
-                MatchId = x.MatchId,
-                TeamId = x.TeamId,
-                Corners = x.Corners,
-                Posession = x.Posession,
+                Match = match, 
+                Team = team,
+                Players = players.ToList(),
+                Corners = item.Corners,
+                Posession = item.Posession,
                 Goals = goalsDto,
                 Cards = cardsDto,
-            };
-        });
+            });
 
-        var model = await Task.WhenAll(matchStatViewModel);
+        }
 
-        return  model.ToList();
+        return matchStatViewModelList;
     }
 }

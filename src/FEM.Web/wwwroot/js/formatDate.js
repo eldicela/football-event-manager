@@ -16,3 +16,11 @@ const formatDate = (date, showHour) => {
 
     return stringDate + " " + hour;
 };
+
+
+const formatHour = (dateTime) => {
+    return dateTime.toLocaleTimeString(undefined, {
+        hour: "2-digit",
+        minute: "2-digit",
+    })
+}

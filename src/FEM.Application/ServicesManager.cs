@@ -1,7 +1,9 @@
 ﻿
 
 using FEM.Application.FootballClubPlayer.Service;
+using FEM.Application.FootballClubs.Service;
 using FEM.Application.Interfaces.Services;
+using FEM.Application.Matches.Service;
 using FEM.Application.MatchStatistics.Service;
 using FEM.Application.Players.Service;
 using FEM.Domain.Interfaces.Repositories;
@@ -52,6 +54,26 @@ internal class ServicesManager : IServicesManager
         }
     }
 
+    private IMatchesService _matchesService;
+    public IMatchesService MatchesService
+    {
+        get
+        {
+            _matchesService ??= new MatchesService(_serviceProvider);
+            return _matchesService;
+        }
+    }
+
+    private IFootballClubsService _footballClubsService;
+    public IFootballClubsService FootballClubsService
+    {
+        get
+        {
+            _footballClubsService ??= new FootballClubsService(_serviceProvider);
+            return _footballClubsService;
+        }
+    }
+
     public T WrapInTransaction<T>(Func<T> action)
     {
         lock (_lock)
@@ -77,7 +99,7 @@ internal class ServicesManager : IServicesManager
     {
         lock (_lock)
         {
-            using var transaction =  _unitOfWork.BeginTransactionAsync().Result;
+            using var transaction = _unitOfWork.BeginTransactionAsync().Result;
 
             T result;
             try

@@ -22,7 +22,9 @@ public class MatchViewModel
     public MatchStatus Status { get; set; }
     public int? CategoryId { get; set; }
     public FootballClub Team1 { get; set; }
+    public int Team1Goals { get; set; }
     public FootballClub Team2 { get; set; }
+    public int Team2Goals { get; set; }
 }
 
 public class MatchAddRequestModel

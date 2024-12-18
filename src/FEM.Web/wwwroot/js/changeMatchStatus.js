@@ -1,6 +1,7 @@
 ﻿const changeStatusModal = document.getElementById('changeStatusModal')
 const modalSubmmitBtn = document.getElementById("changeStatModalSubmmitBtn");
 const changeStatusForm = document.getElementById("changeStatusModalForm");
+const modalCloseBtn = document.getElementById("modal-close-btn");
 
 let matchId = 0;
 
@@ -20,11 +21,14 @@ changeStatusModal.addEventListener('show.bs.modal', function (event) {
 
 const changeStatusFormSubmitHandler = async (event) => {
     event.preventDefault();
-    console.log(event)
+    const statusStringHtmlEl = document.getElementById(`match-status-string-${matchId}`);
+    console.log(statusStringHtmlEl);
+
+    const newStatus = event.target["match-stat-change"].value;
 
     const body = {
         Id: matchId,
-        Status: event.target["match-stat-change"].value,
+        Status: newStatus,
     }
 
     console.log(body)
@@ -45,7 +49,8 @@ const changeStatusFormSubmitHandler = async (event) => {
 
     var data = await response.json()
     console.log(data);
-    changeStatusModal.hide()
+    statusStringHtmlEl.innerText = newStatus.toString();
+    modalCloseBtn.click();
 
 }
 

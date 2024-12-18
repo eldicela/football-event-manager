@@ -25,6 +25,11 @@ internal class GoalsRepository : IGoalRepository
         await _dbSet.AddRangeAsync(goals);
     }
 
+    public async Task<int> CountByMatchIdForTeamIdAsync(int matchId, int teamId)
+    {
+        return await _dbSet.Where(x => x.MatchId == matchId && x.TeamId == teamId).CountAsync();
+    }
+
     public async Task<Goal> GetByIdAsync(int id)
     {
         return await _dbSet.FindAsync(id) ?? throw new Exception($"Goal with id: {id} doesn't exists");
@@ -32,7 +37,6 @@ internal class GoalsRepository : IGoalRepository
 
     public async Task<IEnumerable<Goal>> GetGoalsByMatchAndTeamIdAsync(int matchId, int teamId)
     {
-        return await _dbSet.Where(x => x.TeamId == teamId && x.MatchId == matchId)
-            .ToListAsync();
+        return await _dbSet.Where(x => x.TeamId == teamId && x.MatchId == matchId).ToListAsync();
     }
 }

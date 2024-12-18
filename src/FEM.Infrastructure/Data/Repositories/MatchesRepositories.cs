@@ -41,13 +41,13 @@ namespace FEM.Infrastructure.Data.Repositories
                              Team1 = new FootballClub
                              {
                                  Id = t1.Id,
-                                 Name = t2.Name,
+                                 Name = t1.Name,
                                  Type = t1.Type,
                              },
                              Team2 = new FootballClub
                              {
                                  Id = t2.Id,
-                                 Name = t1.Name,
+                                 Name = t2.Name,
                                  Type = t2.Type,
                              }
                          }
@@ -75,13 +75,13 @@ namespace FEM.Infrastructure.Data.Repositories
                              Team1 = new FootballClub
                              {
                                  Id = t1.Id,
-                                 Name = t2.Name,
+                                 Name = t1.Name,
                                  Type = t1.Type,
                              },
                              Team2 = new FootballClub
                              {
                                  Id = t2.Id,
-                                 Name = t1.Name,
+                                 Name = t2.Name,
                                  Type = t2.Type,
                              }
                          }

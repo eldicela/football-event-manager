@@ -10,6 +10,7 @@ using FluentValidation.Results;
 using FEM.Application.FootballClubs.Get;
 using Microsoft.AspNetCore.Http;
 using FEM.Application.Matches.Update;
+using FEM.Application.Interfaces.Services;
 
 namespace FEM.Web.Areas.Admin.Controllers
 {
@@ -18,10 +19,12 @@ namespace FEM.Web.Areas.Admin.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IValidator<CreateMatchCommand> _createMatchValidator;
+        private readonly IServicesManager _servicesManager;
         public MatchesController(IServiceProvider serviceProvider)
         {
             _mediator = serviceProvider.GetRequiredService<IMediator>();
             _createMatchValidator = serviceProvider.GetRequiredService<IValidator<CreateMatchCommand>>();
+            _servicesManager = serviceProvider.GetRequiredService<IServicesManager>();
         }
 
         [Area("Admin")]
@@ -67,6 +70,8 @@ namespace FEM.Web.Areas.Admin.Controllers
         public async Task<IActionResult> UpdateStatus([FromBody] MatchUpdateStatusModel model)
         {
             if (model.Id <= 0) throw new Exception("Id cannot be negative or zero");
+            var match = await _servicesManager.MatchesService.GetMatchByIdAsync(model.Id);
+            if (match.Status == MatchStatus.FINNISHED) throw new Exception("Cannot change status, match is already finnished");
 
             var matchStat = Enum.Parse<MatchStatus>(model.Status);
 

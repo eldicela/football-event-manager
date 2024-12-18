@@ -21,8 +21,9 @@ public class MatchStatisticsAddRequestModel
 
 public class MatchStatisticsViewModel
 {
-    public int MatchId { get; set; }
-    public int TeamId { get; set; }
+    public Match Match { get; set; }
+    public FootballClub Team { get; set; }
+    public List<Player> Players { get; set; }
     public byte Corners { get; set; }
     public decimal Posession { get; set; }
     public List<Goal> Goals { get; set; }

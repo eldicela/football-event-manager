@@ -10,6 +10,20 @@ const matchesSection = document.getElementById("matches-list");
 
 startDateInput.value = formatDate(new Date(), false)
 
+const matchHtmlPublicPageFn = (x) => {
+    console.log(x);
+    return `
+        <div class="match">
+            <div>${x.team1.name}</div>
+            <div class="match-info">
+            <span>${formatHour(new Date(x.date))}</span>
+            <span>${x.status === 6 ? `${x.team1Goals} - ${x.team2Goals}` : ""}</span>
+            </div>
+            <div>${x.team2.name}</div>
+            ${x.status == 6 ? `<a href="${BASE_APP_PATH}/matches/details/${x.id}">Details</a>` : ""}
+        </div>  `
+}
+
 const onFormSubbmitHandler = async (event) => {
     event.preventDefault()
     console.log(nameInput.value)
@@ -17,26 +31,20 @@ const onFormSubbmitHandler = async (event) => {
     const response = await fetch(`${BASE_APP_PATH}/matches/filter?std=${startDateInput.value}&edt=${endDateInput.value}&lm=${liveMatchesInput.checked}&st=${sortTypeInput.value}&tname=${nameInput.value}`)
     const resData = await response.json();
 
+    if (liveMatchesInput.checked && resData.length < 1) {
+        matchesSection.innerHTML = `<p>Cannot find any live matches</p>`
+        return;
+    }
+
     if (resData.length < 1) {
         matchesSection.innerHTML = `<p>Cannot find matches on ${formatDate(new Date(startDateInput.value))}</p>`
         return;
     }
 
     let htmlMatches = ` `
-    resData.forEach(x =>
-
-        htmlMatches += `
-        <div class="match">
-            <div>${x.team1.name}</div>
-            <div>${formatDate(new Date(x.date), true)}</div>
-            <div>${x.team2.name}</div>
-            <a href="${BASE_APP_PATH}/matches/details/${x.id}">Details</a>
-        </div>  `
-    )
+    resData.forEach(x => htmlMatches += matchHtmlPublicPageFn(x))
 
     matchesSection.innerHTML = htmlMatches
-    console.log(htmlMatches);
-    console.log(resData);
 }
 
 const teamNameChangeHandler = async (event) => {
@@ -57,16 +65,10 @@ const teamNameChangeHandler = async (event) => {
     let htmlMatches = ` `
     resData.forEach(x =>
 
-        htmlMatches += `
-        <div class="match">
-            <div>${x.team1.name}</div>
-            <div>${formatDate(new Date(x.date), true)}</div>
-            <div>${x.team2.name}</div>
-            <a href="${BASE_APP_PATH}/matches/details/${x.id}">Details</a>
-        </div>  `
+        htmlMatches += matchHtmlPublicPageFn(x)
     )
 
-    matchesSection.innerHTML = htmlMatches  
+    matchesSection.innerHTML = htmlMatches
 }
 
 const liveMatchesChangeHandler = (event) => {

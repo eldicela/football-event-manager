@@ -18,26 +18,37 @@ internal class GetMatchesFilteredQueryHandler : IQueryHandler<GetMatchesFiltered
     public async Task<IEnumerable<MatchViewModel>> Handle(GetMatchesFilteredQuery request, CancellationToken cancellationToken)
     {
         var matches = await _unitOfWork.MatchRepositry.GetMatchesFilterdAsync(new Domain.Common.MatchFilter { StartDate = request.StartDate, EndDate = request.EndDate, TeamName = request.TeamName, Live = request.Live, Sort = request.SortType, });
-        return matches.Select(x => new MatchViewModel
+        List<MatchViewModel> matchViewModel = new List<MatchViewModel>();
+
+        foreach (var match in matches)
         {
+            var t1Goals = await _unitOfWork.GoalRepository.CountByMatchIdForTeamIdAsync(match.Id, match.Team1.Id);
+            var t2Goals = await _unitOfWork.GoalRepository.CountByMatchIdForTeamIdAsync(match.Id, match.Team2.Id);
 
-            Id = x.Id,
-            Date = x.Date,
-            CategoryId = x.CategoryId,
-            Status = x.Status,
+            var vmm = new MatchViewModel
+            {
+                Id = match.Id,
+                Date = match.Date,
+                CategoryId = match.CategoryId,
+                Status = match.Status,
 
-            Team1 = new FootballClub
-            {
-                Id = x.Team1.Id,
-                Name = x.Team1.Name,
-                Type = x.Team1.Type,
-            },
-            Team2 = new FootballClub
-            {
-                Id = x.Team2.Id,
-                Name = x.Team2.Name,
-                Type = x.Team2.Type,
-            }
-        });
+                Team1 = new FootballClub
+                {
+                    Id = match.Team1.Id,
+                    Name = match.Team1.Name,
+                    Type = match.Team1.Type,
+                },
+                Team1Goals = t1Goals,
+                Team2 = new FootballClub
+                {
+                    Id = match.Team2.Id,
+                    Name = match.Team2.Name,
+                    Type = match.Team2.Type,
+                },
+                Team2Goals = t2Goals,
+            };
+            matchViewModel.Add(vmm);
+        }
+        return matchViewModel;
     }
 }

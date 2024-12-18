@@ -1,0 +1,39 @@
+﻿.match__header {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.match__header--results {
+    display: flex;
+    flex-direction: column;
+}
+
+    .match__header--results h4 {
+        font-size: 2rem;
+    }
+
+    .match__header--results span {
+        font-size: 1.6rem;
+        align-self: center;
+    }
+
+.match__header-time-info p, .match__header-time-info span {
+    font-size: 1.6rem;
+}
+
+
+.match__body {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.match__body__goals, .match__body__cards {
+    display: flex;
+    flex-direction: column;
+}
+
+.match__body__goals-goal, .match__body__cards-card {
+    display: flex;
+    column-gap: 15px;
+}
